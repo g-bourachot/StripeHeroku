@@ -21,11 +21,12 @@ get '/' do
 end
 
 post '/ephemeral_keys' do
-  authenticate(params["customer_id"])
+  customerload = params
+  authenticate(customerload[:customer_id])
   begin
     key = Stripe::EphemeralKey.create(
       {customer: @customer.id},
-      {stripe_version: params["api_version"]}
+      {stripe_version: customerload[:api_version}
     )
   rescue Stripe::StripeError => e
     status 402
@@ -37,9 +38,9 @@ post '/ephemeral_keys' do
 end
 
 post '/charge' do
-  authenticate(payload[:customer_id])
   # Get the credit card details submitted
   payload = params
+  authenticate(payload[:customer_id])
   if request.content_type.include? 'application/json' and params.empty?
     payload = indifferent_params(JSON.parse(request.body.read))
   end
