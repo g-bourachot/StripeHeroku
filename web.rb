@@ -21,7 +21,7 @@ get '/' do
 end
 
 post '/ephemeral_keys' do
-  authenticate!
+  authenticate(params["customer_id"])
   begin
     key = Stripe::EphemeralKey.create(
       {customer: @customer.id},
@@ -37,7 +37,7 @@ post '/ephemeral_keys' do
 end
 
 post '/charge' do
-  authenticate!
+  authenticate(payload[:customer_id])
   # Get the credit card details submitted
   payload = params
   if request.content_type.include? 'application/json' and params.empty?
@@ -65,12 +65,12 @@ post '/charge' do
   return log_info("Charge successfully created")
 end
 
-def authenticate!
+def authenticate(customerId)
   # This code simulates "loading the Stripe customer for your current session".
   # Your own logic will likely look very different.
   return @customer if @customer
-  if session.has_key?(:customer_id)
-    customer_id = session[:customer_id]
+  if customerId != ""
+    customer_id = customerId
     begin
       @customer = Stripe::Customer.retrieve(customer_id)
     rescue Stripe::InvalidRequestError
