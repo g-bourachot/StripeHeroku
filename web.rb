@@ -26,7 +26,7 @@ post '/ephemeral_keys' do
   begin
     key = Stripe::EphemeralKey.create(
       {customer: @customer.id},
-      {stripe_version: customerload[:api_version}
+      {stripe_version: customerload[:api_version]}
     )
   rescue Stripe::StripeError => e
     status 402
