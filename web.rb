@@ -70,7 +70,7 @@ def authenticate(customerId)
   # This code simulates "loading the Stripe customer for your current session".
   # Your own logic will likely look very different.
   return @customer if @customer
-  if customerId != ""
+  if customerId != "_"
     customer_id = customerId
     begin
       @customer = Stripe::Customer.retrieve(customer_id)
