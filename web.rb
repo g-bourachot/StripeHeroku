@@ -37,6 +37,22 @@ post '/ephemeral_keys' do
   key.to_json
 end
 
+post 'updateCustomer' do
+    updateCustomerload = params
+    authenticate(updateCustomerload[:customer_id])
+    begin
+        cu = Stripe::Customer.retrieve(updateCustomerload[:customer_id])
+        cu.description = updateCustomerload[:email]
+        cu.email = updateCustomerload[:email]
+        cu.save
+    rescue Stripe::StripeError => e
+        status 402
+        return log_info("Error creating ephemeral key: #{e.message}")
+    end
+    status 200
+    return log_info("Customer successfully updated")
+end
+
 post '/charge' do
   # Get the credit card details submitted
   payload = params
