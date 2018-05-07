@@ -70,7 +70,7 @@ post '/charge' do
       :currency => "eur",
       :customer => customer,
       :source => source,
-      :description => payload[:description,
+      :description => payload[:description],
       :shipping => payload[:shipping],
     )
   rescue Stripe::StripeError => e
