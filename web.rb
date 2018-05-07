@@ -70,7 +70,7 @@ post '/charge' do
       :currency => "eur",
       :customer => customer,
       :source => source,
-      :description => "Example Charge",
+      :description => payload[:description,
       :shipping => payload[:shipping],
     )
   rescue Stripe::StripeError => e
@@ -94,7 +94,7 @@ def authenticate(customerId)
     end
   else
     begin
-      @customer = Stripe::Customer.create(:description => "mobile SDK example customer")
+      @customer = Stripe::Customer.create(:description => "Mobile SDK")
     rescue Stripe::InvalidRequestError
     end
     session[:customer_id] = @customer.id
