@@ -37,7 +37,7 @@ post '/ephemeral_keys' do
   key.to_json
 end
 
-post 'updateCustomer' do
+post '/updateCustomer' do
     updateCustomerload = params
     authenticate(updateCustomerload[:customer_id])
     begin
@@ -47,7 +47,7 @@ post 'updateCustomer' do
         cu.save
     rescue Stripe::StripeError => e
         status 402
-        return log_info("Error creating ephemeral key: #{e.message}")
+        return log_info("Error updating customer: #{e.message}")
     end
     status 200
     return log_info("Customer successfully updated")
